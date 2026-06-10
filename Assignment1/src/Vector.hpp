@@ -11,12 +11,11 @@ void Vector<T>::clear() {
 
 template<typename T>
 void Vector<T>::append(T element) {
-    size_++;
-
-    if (size_ >= capacity_) {
+    if (size_ == capacity_) {
         grow();
     }
 
+    size_++;
     data_[size_ - 1] = element;
 }
 
@@ -26,7 +25,7 @@ void Vector<T>::remove(std::size_t index) {
         throw std::out_of_range("Index out of range");
     }
 
-    for (size_t i = index; i < size_; i++) {
+    for (size_t i = index; i < size_ - 1; i++) {
         data_[i] = data_[i + 1];
     }
 
@@ -39,30 +38,17 @@ void Vector<T>::insert(T element, std::size_t index) {
         throw std::out_of_range("Index out of range");
     }
 
+    if (size_ == capacity_) {
+        grow();
+    }
+
     size_++;
 
-    if (size_ >= capacity_) {
-        capacity_ += step_;
+    for (size_t i = size_ - 1 ; i > index; i--) {
+        data_[i] = data_[i - 1];
     }
 
-    T* newData = new T[capacity_];
-
-    for (size_t i = 0; i < size_; i++) {
-        if (i < index) {
-            newData[i] = data_[i];
-            continue;
-        }
-
-        if ((i > index) && i > 0) {
-            newData[i] = data_[i - 1];
-        }
-
-    }
-
-    newData[index] = element;
-
-    delete [] data_;
-    data_ = newData;
+    data_[index] = element;
 }
 
 template<typename T>
