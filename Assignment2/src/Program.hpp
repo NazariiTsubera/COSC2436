@@ -1,7 +1,7 @@
 //
 // Created by nazarii on 6/9/26.
 //
-
+#pragma once
 #include "Program.h"
 
 #include <iostream>
@@ -13,7 +13,6 @@ Program<T>::Program() {
     this->helpPrompt_ = "Please enter one of following commands:\n"
     "ADD <value>\n"
     "DELETE <index>\n"
-    "INSERT <value> <index>\n"
     "COUNT\n"
     "SHOW\n"
     "CLEAR\n"
@@ -54,17 +53,12 @@ std::optional<Command<T>> Program<T>::parseCommand(const std::string &input) {
     }
 
     if (operation == "DELETE") {
-        size_t index;
-        if (!(ss >> index)) {
-            throw std::invalid_argument("Invalid input");
-        }
-
         std::string extra;
         if (ss >> extra) {
             throw std::invalid_argument("Invalid input");
         }
 
-        return RemoveCommand{index};
+        return PopCommand{};
     }
 
     if (operation == "SHOW") {
@@ -77,24 +71,6 @@ std::optional<Command<T>> Program<T>::parseCommand(const std::string &input) {
         return ShowCommand{};
     }
 
-    if (operation == "INSERT") {
-        T value;
-        size_t index;
-        std::string extra;
-
-        if (!(ss >> value)) {
-            throw std::invalid_argument("Invalid input");
-        }
-        if (!(ss >> index)) {
-            throw std::invalid_argument("Invalid input");
-        }
-
-        if (ss >> extra) {
-            throw std::invalid_argument("Invalid input");
-        }
-
-        return InsertCommand<T>{value, index};
-    }
 
     if (operation == "CLEAR") {
         std::string extra;
@@ -129,14 +105,14 @@ std::optional<Command<T>> Program<T>::parseCommand(const std::string &input) {
 }
 
 template<typename T>
-void Program<T>::printVector() {
+void Program<T>::printQueue() {
 
     std::cout << std::endl << "[";
     //TODO: Switch to iterator
-    for (int i = 0; i < vector_.size(); i++) {
-        std::cout << vector_.get(i);
+    for (int i = 0; i < queue_.size(); i++) {
+        std::cout << queue_.get(i);
 
-        if (i < vector_.size() - 1) {
+        if (i < queue_.size() - 1) {
             std::cout << ", ";
         }
     }
@@ -147,31 +123,25 @@ void Program<T>::printVector() {
 template<typename T>
 bool Program<T>::handle(Command<T> &cmd) {
     if (auto command = std::get_if<AddCommand<T>>(&cmd)) {
-        vector_.append(command->element);
-        printVector();
+        queue_.add(command->element);
+        printQueue();
         return true;
     }
 
-    if (auto command = std::get_if<RemoveCommand>(&cmd)) {
-        vector_.remove(command->index);
-        printVector();
-        return true;
-    }
-
-    if (auto command = std::get_if<InsertCommand<T>>(&cmd)) {
-        vector_.insert(command->element, command->index);
-        printVector();
+    if (auto command = std::get_if<PopCommand>(&cmd)) {
+        queue_.pop();
+        printQueue();
         return true;
     }
 
     if (auto command = std::get_if<ClearCommand>(&cmd)) {
-        vector_.clear();
-        printVector();
+        queue_.clear();
+        printQueue();
         return true;
     }
 
     if (auto command = std::get_if<ShowCommand>(&cmd)) {
-        printVector();
+        printQueue();
         return true;
     }
 
@@ -187,7 +157,7 @@ bool Program<T>::handle(Command<T> &cmd) {
 
     if (auto command = std::get_if<CountCommand>(&cmd)) {
         std::cout << std::endl;
-        std::cout << "Count: " << vector_.size() << std::endl;
+        std::cout << "Count: " << queue_.size() << std::endl;
         return true;
     }
 

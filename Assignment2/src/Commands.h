@@ -12,17 +12,7 @@ struct AddCommand {
     T element;
 };
 
-template<typename T>
-struct InsertCommand {
-    T element;
-    std::size_t index;
-};
-
-
-
-struct RemoveCommand {
-    std::size_t index;
-};
+struct PopCommand {};
 struct ShowCommand {};
 struct ClearCommand {};
 struct ExitCommand {};
@@ -32,13 +22,12 @@ struct CountCommand {};
 template<typename T>
 using Command = std::variant<
     AddCommand<T>,
-    InsertCommand<T>,
-    RemoveCommand,
     ShowCommand,
     ClearCommand,
     ExitCommand,
     HelpCommand,
-    CountCommand
+    CountCommand,
+    PopCommand
 >;
 
 #endif //ASSIGNMENT1_COMMANDS_H
