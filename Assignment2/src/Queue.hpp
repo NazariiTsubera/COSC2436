@@ -54,7 +54,7 @@ T Queue<T>::pop() {
 
     T popped = data_[0];
 
-    for (int i = 0; i < size_; i++) {
+    for (int i = 0; i < size_ -1 ; i++) {
         data_[i] = data_[i + 1];
     }
 

@@ -7,29 +7,28 @@
 
 
 template <typename T>
-class Queue {
+class Stack {
 public:
-    Queue(size_t capacity=10);
-    virtual ~Queue();
+    explicit Stack(size_t capacity=10);
+    virtual ~Stack();
 
-    Queue(Queue<T>&) = delete;
-    Queue<T>& operator=(const Queue<T>&) = delete;
+    Stack(Stack<T>&) = delete;
+    Stack<T>& operator=(const Stack<T>&) = delete;
 
-    void add(T element);
-    void clear();
+    void push(T element);
     T pop();
+
     [[nodiscard]] size_t size() const;
-    [[nodiscard]] T get(size_t index) const;
 private:
     void grow();
-private:
     static constexpr size_t step_ = 10;
     size_t size_;
     size_t capacity_;
     T* data_;
 };
 
-
-#include "Queue.hpp"
+#include "Stack.hpp"
 
 #endif //QUEUE_H
+
+
