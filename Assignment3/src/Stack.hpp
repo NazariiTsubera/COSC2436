@@ -6,7 +6,7 @@
 #include "Stack.h"
 
 template<typename T>
-Stack<T>::Stack(size_t capacity) : capacity_(capacity), size_(0){
+Stack<T>::Stack(size_t capacity) : data_(nullptr), capacity_(capacity), size_(0){
     grow();
 }
 
@@ -35,10 +35,7 @@ T Stack<T>::pop() {
 
     size_--;
 
-    T old = data_[size_];
-    data_[size_] = 0;
-
-    return old;
+    return data_[size_];
 }
 
 template<typename T>
