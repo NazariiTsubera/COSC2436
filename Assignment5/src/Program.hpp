@@ -39,11 +39,16 @@ void Program::run() {
     }
 }
 
-inline int Program::fibonacci(int levels, int depth){
-
+inline void print(int depth, const std::string& msg) {
     for (int i = 1; i <= depth; i++) std::cout << "  ";
     std::cout << " - ";
-    std::cout << "Entering level " << depth << std::endl;
+    std::cout << msg << std::endl;
+}
+
+inline int Program::fibonacci(int levels, int depth){
+
+    print(depth, "Entering level " + std::to_string(levels));
+
 
     if (levels == 1) {
         return 1;
@@ -53,5 +58,11 @@ inline int Program::fibonacci(int levels, int depth){
         return 0;
     }
 
-    return fibonacci(levels - 1, depth + 1) + fibonacci(levels - 2, depth + 1);
+
+    int number = fibonacci(levels - 1, depth + 1) + fibonacci(levels - 2, depth + 1);
+
+
+    print(depth, "Exiting level " + std::to_string(levels));
+
+    return number;
 }
