@@ -10,7 +10,7 @@
 #include <string>
 
 
-class LinkedList {
+class DoublyLinkedList {
 private:
     struct Node {
         Node* next;
@@ -35,8 +35,8 @@ public:
     //     }
     // }
 public:
-    LinkedList() : head(nullptr) {}
-    virtual ~LinkedList() {
+    DoublyLinkedList() : head(nullptr) {}
+    virtual ~DoublyLinkedList() {
         clear();
     }
 
